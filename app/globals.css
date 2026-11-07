@@ -1,0 +1,8 @@
+/* Shriftlar loyiha ichida (public/fonts) — tashqi CDN'ga bog'liq emas */
+@font-face{font-family:'Noto Serif';font-style:normal;font-weight:400;font-display:block;src:url('/fonts/noto-serif-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'Noto Serif';font-style:normal;font-weight:500;font-display:block;src:url('/fonts/noto-serif-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'Noto Serif';font-style:normal;font-weight:600;font-display:block;src:url('/fonts/noto-serif-latin-600-normal.woff2') format('woff2')}
+@font-face{font-family:'Noto Serif';font-style:normal;font-weight:700;font-display:block;src:url('/fonts/noto-serif-latin-700-normal.woff2') format('woff2')}
+@font-face{font-family:'Noto Serif Display';font-style:normal;font-weight:500;font-display:block;src:url('/fonts/noto-serif-display-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'Noto Serif Display';font-style:normal;font-weight:600;font-display:block;src:url('/fonts/noto-serif-display-latin-600-normal.woff2') format('woff2')}
+@font-face{font-family:'Noto Serif Display';font-style:normal;font-weight:700;font-display:block;src:url('/fonts/noto-serif-display-latin-700-normal.woff2') format('woff2')}
