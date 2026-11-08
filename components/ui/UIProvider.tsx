@@ -1,4 +1,5 @@
 'use client';
+import { Rosette } from '@/components/ornaments/Ornaments';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 type ModalState = { html: string; afterOpen?: (root: HTMLElement) => void } | null;
@@ -50,7 +51,7 @@ export default function UIProvider({ children }: { children: ReactNode }) {
     <Ctx.Provider value={value}>
       <div id="pre" className={loaded ? 'done' : ''}>
         <div>
-          <svg className="star" viewBox="0 0 100 100"><use href="#rosette" /></svg>
+          <Rosette tone="gold" className="star" />
           <div className="t">ISLOHOTDAN NATIJAGA</div>
           <div className="bar"><i /></div>
         </div>
