@@ -313,7 +313,7 @@ export default function Site({ photos }: { photos: Photos }) {
             <SecHead title="10 yil solnomasi" sub="Muhim voqealar, yangi imkoniyatlar, real oʻzgarishlar" light />
             <div className="tl-wrap rv">
               <div className="tl-line">
-                <i style={{ width: tl < 0 ? 0 : `${[6.8, 33.8, 59.9, 89.5][tl]}%` }} />
+                <i style={{ width: tl < 0 ? 0 : `${[13, 37.6, 62.4, 87][tl]}%` }} />
               </div>
               <ol className="tl-grid">
                 {TIMELINE.map((t, i) => (
