@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useUI } from "@/components/ui/UIProvider";
-import { BorderStrip, Skyline } from "@/components/ornaments/Ornaments";
+import { BorderStrip, Rosette, Skyline } from "@/components/ornaments/Ornaments";
 import { IcFacebook, IcInstagram, IcTelegram, IcYoutube } from "@/components/icons/Icons";
 import { FOOTER_NAV, NAV } from "@/lib/data";
 import type { SiteContent } from "@/lib/content";
@@ -30,6 +30,7 @@ export function Brand({ light }: { light?: boolean }) {
     <span className={`brand${light ? " light" : ""}`}>
       <Image src={light ? "/brand/yp-white.png" : "/brand/yp-dark.png"} alt="Yoshlar parlamenti" width={863} height={573} className="brand-logo" priority={!light} />
       <i className="brand-sep" aria-hidden="true" />
+      <Rosette tone={light ? "gold" : "navy"} className="brand-ros" />
       <span className="brand-t">
         <b>ISLOHOTDAN</b>
         <b>NATIJAGA</b>

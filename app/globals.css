@@ -384,6 +384,9 @@ ul,ol{list-style:none}
 .brand-t small{display:block;margin-top:calc(var(--u)*2.4);font:500 max(11.5px,calc(var(--u)*5.2))/1 var(--text);letter-spacing:.08em;color:var(--ink)}
 .brand.light .brand-t b,.brand.light .brand-t small{color:#fff}
 .brand.light .brand-logo{height:calc(var(--u)*26)}
+.brand-ros{width:calc(var(--u)*20);height:calc(var(--u)*20);flex:none;margin-right:calc(var(--u)*-1.5);transition:transform .9s var(--ease)}
+.logo:hover .brand-ros{transform:rotate(45deg)}
+.brand.light .brand-ros{width:calc(var(--u)*22);height:calc(var(--u)*22)}
 .hdr-in{padding-top:calc(var(--u)*4)}
 .hdr.sc .brand-logo{height:calc(var(--u)*19)}
 .brand-logo{transition:height .35s var(--ease)}
@@ -684,6 +687,7 @@ ul,ol{list-style:none}
   .life{padding:56px 0 24px}.opps{padding:24px 0 48px}.books{padding:56px 0 40px}
   .pg:nth-child(5),.pg:nth-child(6),.pg:nth-child(7){margin-top:0}
   .brand{gap:10px}.brand-logo{height:40px}.hdr.sc .brand-logo{height:34px}.brand-sep{height:32px}
+  .brand-ros{width:34px;height:34px;margin-right:-4px}.brand.light .brand-ros{width:38px;height:38px}
   .brand-t b{font-size:15px}.brand-t small{font-size:10px;margin-top:4px}
   .brand.light .brand-logo{height:44px}
   .pquote{padding:48px 0}
@@ -746,7 +750,7 @@ ul,ol{list-style:none}
   .ftr-bot span:first-child,.ftr-bot span:last-child{justify-self:auto;font-size:13px}
 }
 @media (max-width:640px){
-  .brand-t{display:none}.brand-sep{display:none}
+  .brand-t{display:none}
   .ftr .brand-t{display:block}.ftr .brand-sep{display:block}
   .tl-card-y,.tl-card.text-only .tl-card-y{font-size:38px}
   .wrap{padding:0 18px}
