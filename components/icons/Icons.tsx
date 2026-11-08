@@ -71,3 +71,9 @@ export const IcYoutube = (p: P) => (
 );
 
 export const PROGRAM_ICONS = [IcBilim, IcSalomatlik, IcIqtisodiyot, IcTabiat, IcAdolat, IcMahalla, IcTinchlik];
+
+/** Admin panelda tanlanadigan boʻlim ikonkalari */
+export const ICON_MAP = {
+  oliy: IcOliy, talaba: IcTalaba, nodavlat: IcNodavlat, bilim: IcBilim, salomatlik: IcSalomatlik, iqtisodiyot: IcIqtisodiyot,
+  tabiat: IcTabiat, adolat: IcAdolat, mahalla: IcMahalla, tinchlik: IcTinchlik, grant: IcGrant, kredit: IcKredit, xizmat: IcXizmat,
+} as const;

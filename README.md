@@ -13,6 +13,12 @@ npm run dev        # http://localhost:3000
 
 ## Admin panel — `/admin`
 
+Boʻlimlar: Bosh qism (Prezident suratini yoqish/oʻchirish va almashtirish), Prezident soʻzi,
+Natijalar boʻlimlari (har biri alohida sahifa `/natijalar/<manzil>`, ichida koʻrsatkichlar roʻyxati),
+10 yil solnomasi (2016–2026, har bir yil uchun sarlavha, matn, rasm), video muqovalari,
+sayt yaratuvchisi va saqlash tarixi.
+
+
 Saytdagi 11 ta fotoni (bosh qism, “Avval va hozir”, solnoma, videolar muqovasi) almashtirish.
 Har bir rasm yonida tavsiya etilgan oʻlcham, eng kichik oʻlcham, nisbat va jonli koʻrinish bor;
 yuklangan rasm oʻlchami avtomatik tekshiriladi. Har bir saqlash — alohida versiya,

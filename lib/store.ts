@@ -49,7 +49,7 @@ async function loadLatest(): Promise<SiteContent> {
 }
 
 /** Saytdagi barcha sahifalar uchun kontent (kesh bilan; saqlanganda yangilanadi) */
-export const getContent = unstable_cache(loadLatest, ["pi-content-v1"], { tags: [CONTENT_TAG], revalidate: 3600 });
+export const getContent = unstable_cache(loadLatest, ["pi-content-v2"], { tags: [CONTENT_TAG], revalidate: 3600 });
 
 /** Admin panel uchun: keshsiz, eng soʻnggi holat */
 export const getContentFresh = loadLatest;

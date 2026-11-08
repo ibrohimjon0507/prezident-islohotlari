@@ -1,37 +1,33 @@
 "use client";
 /**
  * Bosh sahifa — dizayn boʻyicha toʻliq kod bilan yozilgan.
- * Bezaklar SVG, matnlar haqiqiy matn, fotolar admin paneldan almashtiriladi.
+ * Bezaklar SVG, matnlar haqiqiy matn, kontent va fotolar admin paneldan boshqariladi.
  */
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useUI } from "@/components/ui/UIProvider";
 import { countUp, useReveal } from "@/components/ui/useReveal";
-import { ArchFrame, BorderStrip, Damask, Floral, HeroBand, HeroCorner, Rosette, Skyline, TowerLeft, TowerRight } from "@/components/ornaments/Ornaments";
-import { IcFacebook, IcGrant, IcInstagram, IcKredit, IcNodavlat, IcOliy, IcTalaba, IcTelegram, IcXizmat, IcYoutube, PROGRAM_ICONS } from "@/components/icons/Icons";
+import { ArchFrame, Damask, HeroBand, HeroCorner, Rosette, TowerLeft, TowerRight } from "@/components/ornaments/Ornaments";
+import { ICON_MAP, IcGrant, IcKredit, IcXizmat, PROGRAM_ICONS } from "@/components/icons/Icons";
 import UzMap from "./UzMap";
-import { BOOKS, COMPARE, FOOTER_NAV, LIFE, NAV, OPPORTUNITIES, PROGRAMS, TIMELINE } from "@/lib/data";
+import { Footer, Header, useAnchor } from "./Chrome";
+import { BOOKS, LIFE, OPPORTUNITIES, PROGRAMS } from "@/lib/data";
 import { UZ_REGIONS } from "@/lib/uzmap";
+import { heroPhoto, lifePhoto, parseNum, type SiteContent } from "@/lib/content";
 
-type Photos = Record<string, string>;
-
-const Arrow = () => (
+export const Arrow = () => (
   <svg className="arr" viewBox="0 0 24 24" aria-hidden="true">
     <path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
-const Chev = () => (
+export const Chev = () => (
   <svg className="chev" viewBox="0 0 12 20" aria-hidden="true">
     <path d="M2.5 2.5l7 7.5-7 7.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
-const Ext = () => (
-  <svg className="ext" viewBox="0 0 16 16" aria-hidden="true">
-    <path d="M5 11l6-6M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-  </svg>
-);
 
-function SecHead({ title, sub, light }: { title: string; sub?: string; light?: boolean }) {
+export function SecHead({ title, sub, light }: { title: string; sub?: string; light?: boolean }) {
   return (
     <div className={`sh rv${light ? " light" : ""}`}>
       <h2>
@@ -44,45 +40,38 @@ function SecHead({ title, sub, light }: { title: string; sub?: string; light?: b
   );
 }
 
+/** Raqam: "1,535" → sanab chiqadi va vergul bilan koʻrsatadi */
+function Num({ v }: { v: string }) {
+  const { n, dec } = parseNum(v);
+  return (
+    <span data-count={n} data-dec={dec}>
+      0
+    </span>
+  );
+}
+
 const sorted = [...UZ_REGIONS].sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
 
-export default function Site({ photos }: { photos: Photos }) {
+export default function Site({ c }: { c: SiteContent }) {
   const { openModal, toast } = useUI();
+  const go = useAnchor();
   const root = useRef<HTMLDivElement>(null);
-  const [scrolled, setScrolled] = useState(false);
-  const [menu, setMenu] = useState(false);
-  const [lang, setLang] = useState("UZ");
-  const [langOpen, setLangOpen] = useState(false);
-  const [q, setQ] = useState("");
-  const [active, setActive] = useState("");
-  const [tl, setTl] = useState(-1);
   const [region, setRegion] = useState<string | null>(null);
   const [selOpen, setSelOpen] = useState(false);
   const [year, setYear] = useState(2016);
+  const [tl, setTl] = useState(-1);
   const tlTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const railRef = useRef<HTMLOListElement>(null);
+  const years = c.timeline;
 
-  /* Paydo boʻlish + raqamlar sanogʻi + solnoma avtomatik almashinuvi */
   useReveal(root, (el) => {
     el.querySelectorAll<HTMLElement>("[data-count]").forEach((n) => countUp(n, Number(n.dataset.count), Number(n.dataset.dec || 0)));
     if (el.classList.contains("tl-wrap")) startTl(0);
   });
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(scrollY > 10);
-      let cur = "";
-      for (const n of NAV) {
-        const e = document.querySelector(n.href);
-        if (e && e.getBoundingClientRect().top < 160) cur = n.href;
-      }
-      setActive(cur);
-    };
-    addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
     const close = (e: Event) => {
-      const t = e.target as Element;
-      if (!t.closest?.(".lang")) setLangOpen(false);
-      if (!t.closest?.(".sel")) setSelOpen(false);
+      if (!(e.target as Element).closest?.(".sel")) setSelOpen(false);
     };
     document.addEventListener("click", close);
     let y = 2016;
@@ -91,110 +80,55 @@ export default function Site({ photos }: { photos: Photos }) {
       setYear(y);
       if (y >= 2026) clearInterval(yt);
     }, 75);
-    const start = setTimeout(() => {}, 0);
     return () => {
-      removeEventListener("scroll", onScroll);
       document.removeEventListener("click", close);
       clearInterval(yt);
-      clearTimeout(start);
       if (tlTimer.current) clearInterval(tlTimer.current);
     };
   }, []);
 
+  /* Tanlangan yil tugmasini koʻrinadigan joyga surish (telefonda) */
   useEffect(() => {
-    document.body.classList.toggle("menu-open", menu);
-  }, [menu]);
+    const r = railRef.current, b = r?.children[tl] as HTMLElement | undefined;
+    if (r && b && r.scrollWidth > r.clientWidth) r.scrollTo({ left: b.offsetLeft - r.clientWidth / 2 + b.offsetWidth / 2, behavior: "smooth" });
+  }, [tl]);
 
-  function startTl(i: number) {
+  function startTl(i: number, auto = true) {
     setTl(i);
     if (tlTimer.current) clearInterval(tlTimer.current);
-    tlTimer.current = setInterval(() => setTl((v) => (v + 1) % 4), 4500);
+    if (auto) tlTimer.current = setInterval(() => setTl((v) => (v + 1) % years.length), 5000);
   }
-
-  const go = (href: string) => (e: React.MouseEvent) => {
-    if (!href.startsWith("#")) return;
-    e.preventDefault();
-    setMenu(false);
-    if (href === "#aloqa") return contact();
-    const t = document.querySelector(href);
-    if (t) scrollTo({ top: t.getBoundingClientRect().top + scrollY - 70, behavior: "smooth" });
-  };
 
   const tag = (s: string) => `<p class="m-tag">${s}</p>`;
-  function contact() {
-    openModal(
-      `<h3>Aloqa</h3><p>Taklif va murojaatlaringizni yuboring.</p><form class="m-form"><input required placeholder="Ismingiz"><textarea required rows="4" placeholder="Xabar"></textarea><button class="btn btn-teal">Yuborish</button></form>`,
-      (r) => {
-        const f = r.querySelector("form");
-        if (f) f.onsubmit = (ev) => (ev.preventDefault(), toast("Rahmat! Xabaringiz qabul qilindi."));
-      },
-    );
-  }
   const regionName = region ? UZ_REGIONS.find((r) => r.id === region)?.name : null;
+  const cur = tl >= 0 ? years[tl] : years[0];
+  const showPhoto = c.hero.showPhoto;
 
   return (
     <div className="site" ref={root}>
-      <p className="demo">Dizayn namunasi</p>
-
-      {/* ================= SARLAVHA ================= */}
-      <header className={`hdr${scrolled ? " sc" : ""}`}>
-        <div className="wrap hdr-in">
-          <a href="#top" className="logo" onClick={go("#top")} aria-label="Islohotdan natijaga — bosh sahifa">
-            <Rosette />
-            <span>
-              <b>ISLOHOTDAN</b>
-              <b>NATIJAGA</b>
-              <small>2016 · 2026</small>
-            </span>
-          </a>
-          <nav className={`nav${menu ? " open" : ""}`} aria-label="Asosiy menyu">
-            {NAV.map((n) => (
-              <a key={n.href} href={n.href} className={active === n.href ? "on" : undefined} onClick={go(n.href)}>
-                {n.label}
-              </a>
-            ))}
-          </nav>
-          <div className="tools">
-            <i className="vsep" aria-hidden="true" />
-            <form className="search" onSubmit={(e) => (e.preventDefault(), q.trim() && toast(`“${q.trim()}” boʻyicha qidirilmoqda…`))} role="search">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="2.4" />
-                <path d="M15.5 15.5L21 21" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
-              </svg>
-              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Qidirish..." aria-label="Qidirish" />
-            </form>
-            <div className={`lang${langOpen ? " open" : ""}`}>
-              <button type="button" onClick={() => setLangOpen((v) => !v)} aria-haspopup="listbox" aria-expanded={langOpen}>
-                {lang}
-                <svg viewBox="0 0 12 8" aria-hidden="true">
-                  <path d="M1.5 1.5l4.5 4.5 4.5-4.5" fill="none" stroke="currentColor" strokeWidth="2" />
-                </svg>
-              </button>
-              <ul role="listbox">
-                {["UZ", "ЎЗ", "RU", "EN"].map((l) => (
-                  <li key={l} role="option" aria-selected={l === lang} onClick={() => (setLang(l), setLangOpen(false))}>
-                    {l}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <button type="button" className="burger" aria-label="Menyu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}>
-              <span />
-            </button>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main id="top">
         {/* ================= BOSH QISM ================= */}
-        <section className="hero">
-          <div className="hero-photo">
-            <Image src={photos.hero} alt="Prezident Shavkat Mirziyoyev, orqa fonda Registon" fill priority quality={90} sizes="(max-width: 1100px) 100vw, 60vw" />
-          </div>
+        <section className={`hero${showPhoto ? "" : " no-photo"}`}>
+          {showPhoto ? (
+            <div className="hero-photo">
+              <Image src={heroPhoto(c)} alt="Prezident Shavkat Mirziyoyev, orqa fonda Registon" fill priority quality={90} sizes="(max-width: 1100px) 100vw, 65vw" />
+            </div>
+          ) : (
+            <div className="hero-art" aria-hidden="true">
+              <Damask className="ha-dm" />
+              <Rosette tone="gold" className="ha-ros" />
+              <span className="ha-ten">
+                <b>10</b>
+                <small>YIL</small>
+              </span>
+            </div>
+          )}
           <div className="hero-shade" />
           <HeroBand className="hero-band" />
           <HeroBand className="hero-band hero-band-r" />
-          <HeroCorner className="hero-corner" />
+          {showPhoto && <HeroCorner className="hero-corner" />}
           <div className="wrap hero-in">
             <h1>
               <span><i>Prezident</i></span>
@@ -230,8 +164,6 @@ export default function Site({ photos }: { photos: Photos }) {
 
         {/* ================= 7 MILLIY DASTUR ================= */}
         <section className="programs cream" id="dasturlar">
-          <Floral className="fl fl-l" />
-          <Floral className="fl fl-r" flip />
           <div className="wrap">
             <SecHead title="7 milliy dastur" sub="Yangi Oʻzbekiston taraqqiyotining mustahkam poydevori" />
             <div className="pgrid">
@@ -258,45 +190,66 @@ export default function Site({ photos }: { photos: Photos }) {
           </div>
         </section>
 
-        {/* ================= AVVAL VA HOZIR ================= */}
+        {/* ================= PREZIDENT SOʻZI ================= */}
+        <section className="pquote" aria-label="Prezident soʻzi">
+          <div className="wrap">
+            <figure className="pq rv">
+              <span className="pq-mark" aria-hidden="true">“</span>
+              <blockquote>{c.quote.text}</blockquote>
+              <figcaption>
+                <Rosette tone="gold" className="pq-ros" />
+                <span>
+                  <b>{c.quote.author}</b>
+                  {c.quote.source && <small>{c.quote.source}</small>}
+                </span>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        {/* ================= NATIJALAR (BOʻLIMLAR) ================= */}
         <section className="compare" id="natijalar">
           <div className="wrap">
-            <SecHead title="Avval va hozir" sub="Taʼlim sohasidagi oʻzgarishlar" />
-            <div className="cgrid">
-              {COMPARE.map((c, i) => {
-                const Icon = [IcOliy, IcTalaba, IcNodavlat][i];
+            <SecHead title="Avval va hozir" sub="Boʻlimni tanlang — ichida batafsil koʻrsatkichlar" />
+            <div className={`cgrid n${Math.min(c.categories.length, 3)}`}>
+              {c.categories.map((k, i) => {
+                const Icon = ICON_MAP[k.icon];
                 return (
-                  <article key={c.title} className={`card cc cc${i + 1} rv`} style={{ transitionDelay: `${i * 0.1}s` }}>
-                    <div className="cc-ph">
-                      <Image src={photos[`compare${i + 1}`]} alt="" fill sizes="(max-width: 1100px) 50vw, 15vw" quality={90} />
-                    </div>
+                  <Link key={k.slug} href={`/natijalar/${k.slug}`} className={`card cc rv${k.icon === "talaba" ? " cc2" : ""}`} style={{ transitionDelay: `${(i % 3) * 0.1}s` }}>
+                    {k.photo && (
+                      <div className="cc-ph">
+                        <Image src={k.photo} alt="" fill sizes="(max-width: 1100px) 50vw, 15vw" quality={90} />
+                      </div>
+                    )}
                     <div className="cc-bd">
                       <div className="cc-top">
                         <Icon className="cc-ic" />
                         <div>
-                          <h3>{c.title}</h3>
-                          <p>{c.sub}</p>
+                          <h3>{k.title}</h3>
+                          {k.sub && <p>{k.sub}</p>}
                         </div>
                       </div>
-                      <p className={`cc-num${c.fromUnit ? " small" : ""}`}>
+                      <p className={`cc-num${k.fromUnit || k.toUnit ? " small" : ""}`}>
+                        {k.from && (
+                          <>
+                            <span>
+                              <Num v={k.from} />
+                              {k.fromUnit && <small> {k.fromUnit}</small>}
+                            </span>
+                            <span className="to">→</span>
+                          </>
+                        )}
                         <span>
-                          <span data-count={c.from}>0</span>
-                          {c.fromUnit && <small> {c.fromUnit}</small>}
-                        </span>
-                        <span className="to">→</span>
-                        <span>
-                          <span data-count={c.to} data-dec={c.toDecimals ?? 0}>
-                            0
-                          </span>
-                          {c.toUnit && <small> {c.toUnit}</small>}
+                          <Num v={k.to} />
+                          {k.toUnit && <small> {k.toUnit}</small>}
                         </span>
                       </p>
-                      <p className="cc-yr">{c.years}</p>
-                      <a className="cc-src" href={c.sourceUrl} target="_blank" rel="noopener noreferrer">
-                        Manba: {c.source} <Ext />
-                      </a>
+                      {k.years && <p className="cc-yr">{k.years}</p>}
+                      <span className="cc-more">
+                        Batafsil <Arrow />
+                      </span>
                     </div>
-                  </article>
+                  </Link>
                 );
               })}
             </div>
@@ -312,32 +265,50 @@ export default function Site({ photos }: { photos: Photos }) {
           <div className="wrap">
             <SecHead title="10 yil solnomasi" sub="Muhim voqealar, yangi imkoniyatlar, real oʻzgarishlar" light />
             <div className="tl-wrap rv">
-              <div className="tl-line">
-                <i style={{ width: tl < 0 ? 0 : `${[13, 37.6, 62.4, 87][tl]}%` }} />
+              <div className="tl-rail-box">
+                <div className="tl-line">
+                  <i style={{ width: tl <= 0 ? 0 : `${(tl / (years.length - 1)) * 100}%` }} />
+                </div>
+                <ol className="tl-rail" ref={railRef} style={{ ["--n" as string]: years.length }}>
+                  {years.map((y, i) => (
+                    <li key={y.year} className={`${i === tl ? "on" : ""}${i <= tl ? " past" : ""}`}>
+                      <button type="button" onClick={() => startTl(i, false)} aria-label={`${y.year} — ${y.title}`} aria-current={i === tl}>
+                        <span className="tl-dot" />
+                        <b>{y.year}</b>
+                      </button>
+                    </li>
+                  ))}
+                </ol>
               </div>
-              <ol className="tl-grid">
-                {TIMELINE.map((t, i) => (
-                  <li key={t.year} className={`tl${i === tl ? " on" : ""}${i <= tl ? " past" : ""}`}>
-                    <button type="button" onClick={() => startTl(i)} aria-label={`${t.year} — ${t.title}`}>
-                      <b className="tl-y">{t.year}</b>
-                      <span className="tl-dot" />
-                      <span className="tl-ph">
-                        <Image src={photos[`timeline${i + 1}`]} alt="" fill sizes="(max-width: 1100px) 50vw, 22vw" quality={90} />
-                      </span>
-                      <span className="tl-t">{t.title}</span>
-                      <span className="tl-x">{t.text}</span>
+              <article className={`tl-card${cur.photo ? "" : " text-only"}`} key={cur.year}>
+                {cur.photo && (
+                  <div className="tl-card-ph">
+                    <Image src={cur.photo} alt="" fill sizes="(max-width: 1100px) 100vw, 45vw" quality={90} />
+                  </div>
+                )}
+                <div className="tl-card-bd">
+                  <span className="tl-card-y">{cur.year}</span>
+                  <h3>{cur.title}</h3>
+                  {cur.text && <p>{cur.text}</p>}
+                  <div className="tl-nav">
+                    <button type="button" aria-label="Oldingi yil" onClick={() => startTl((Math.max(tl, 0) - 1 + years.length) % years.length, false)}>
+                      <Chev />
                     </button>
-                  </li>
-                ))}
-              </ol>
+                    <span>
+                      {Math.max(tl, 0) + 1} / {years.length}
+                    </span>
+                    <button type="button" aria-label="Keyingi yil" onClick={() => startTl((Math.max(tl, 0) + 1) % years.length, false)}>
+                      <Chev />
+                    </button>
+                  </div>
+                </div>
+              </article>
             </div>
           </div>
         </section>
 
         {/* ================= HUDUDLAR ================= */}
         <section className="regions cream" id="hududlar">
-          <Floral className="fl fl-l" />
-          <Floral className="fl fl-r" flip />
           <div className="wrap">
             <SecHead title="Hududlardagi oʻzgarishlar" sub="Hududlar kesimida" />
             <div className="rg">
@@ -345,6 +316,7 @@ export default function Site({ photos }: { photos: Photos }) {
                 <UzMap selected={region} onSelect={setRegion} />
               </div>
               <div className="rg-ctl rv">
+                <p className="rg-hint">Xaritadan yoki roʻyxatdan hududni tanlang.</p>
                 <div className={`sel${selOpen ? " open" : ""}`}>
                   <button type="button" onClick={() => setSelOpen((v) => !v)} aria-haspopup="listbox" aria-expanded={selOpen}>
                     <svg className="pinic" viewBox="0 0 24 24" aria-hidden="true">
@@ -391,12 +363,12 @@ export default function Site({ photos }: { photos: Photos }) {
                   style={{ transitionDelay: `${i * 0.1}s` }}
                   onClick={() =>
                     openModal(
-                      `<div class="m-vid"><img src="${photos[`life${i + 1}`]}" alt=""><span class="play"><svg viewBox="0 0 20 20"><path d="M5 3v14l12-7z" fill="currentColor"/></svg></span></div><h3>${l.title}</h3><p>${l.text}. Islohotlar inson hayotida — real hikoyalar.</p>`,
+                      `<div class="m-vid"><img src="${lifePhoto(c, i)}" alt=""><span class="play"><svg viewBox="0 0 20 20"><path d="M5 3v14l12-7z" fill="currentColor"/></svg></span></div><h3>${l.title}</h3><p>${l.text}. Islohotlar inson hayotida — real hikoyalar.</p>`,
                     )
                   }
                 >
                   <span className="lc-ph">
-                    <Image src={photos[`life${i + 1}`]} alt="" fill sizes="(max-width: 1100px) 100vw, 30vw" quality={90} />
+                    <Image src={lifePhoto(c, i)} alt="" fill sizes="(max-width: 1100px) 100vw, 30vw" quality={90} />
                     <span className="play" aria-hidden="true">
                       <svg viewBox="0 0 20 20">
                         <path d="M5.5 3.2v13.6L17 10z" fill="currentColor" />
@@ -479,49 +451,7 @@ export default function Site({ photos }: { photos: Photos }) {
         </section>
       </main>
 
-      {/* ================= PASTKI QISM ================= */}
-      <footer className="ftr">
-        <BorderStrip className="ftr-strip" />
-        <div className="wrap ftr-in">
-          <a href="#top" className="logo gold" onClick={go("#top")}>
-            <Rosette tone="gold" />
-            <span>
-              <b>ISLOHOTDAN</b>
-              <b>NATIJAGA</b>
-              <small>2016 · 2026</small>
-            </span>
-          </a>
-          <nav aria-label="Pastki menyu">
-            {FOOTER_NAV.map((n) => (
-              <a key={n.href} href={n.href} onClick={go(n.href)}>
-                {n.label}
-              </a>
-            ))}
-          </nav>
-          <div className="soc">
-            {[
-              ["Telegram", IcTelegram],
-              ["Facebook", IcFacebook],
-              ["Instagram", IcInstagram],
-              ["YouTube", IcYoutube],
-            ].map(([n, I]) => {
-              const C = I as typeof IcTelegram;
-              return (
-                <a key={n as string} href="#" aria-label={n as string} onClick={(e) => (e.preventDefault(), toast("Ijtimoiy tarmoq sahifasi"))}>
-                  <C />
-                </a>
-              );
-            })}
-          </div>
-        </div>
-        <div className="wrap ftr-sky">
-          <Skyline className="sky" />
-        </div>
-        <div className="wrap ftr-bot">
-          <span>Oʻzbekiston — katta imkoniyatlar mamlakati</span>
-          <span>Barcha huquqlar himoyalangan, 2026.</span>
-        </div>
-      </footer>
+      <Footer credit={c.credit} />
     </div>
   );
 }
