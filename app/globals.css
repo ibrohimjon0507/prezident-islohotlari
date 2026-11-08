@@ -10,7 +10,7 @@
 @font-face{font-family:"Serif Text";font-style:italic;font-weight:100 900;font-stretch:62.5% 100%;font-display:swap;src:url(/fonts/noto-serif-latin-wdth-italic.woff2) format("woff2-variations")}
 
 :root{
-  --u:calc(min(100vw,1200px) / 476); /* kontent eni 1200px bilan cheklangan */
+  --u:calc(min(100vw,1040px) / 476); /* kontent eni 1040px bilan cheklangan */
   --gut:max(0px,calc((100vw - var(--u)*476) / 2)); /* keng ekranda chetdagi boʻsh joy */
   --navy:#0b2350; --navy-2:#0f2b63; --navy-3:#071a3d; --ink:#13244f; --ink-2:#1d2f5c;
   --muted:#5a6784; --gold:#c9a44f; --gold-2:#e6c47e; --teal:#0e98b6; --teal-2:#0a86a1;
@@ -78,7 +78,7 @@ ul,ol{list-style:none}
 #asarlar .sh p{font-size:calc(var(--u)*6.5)}
 
 /* =================== Sarlavha (header) =================== */
-.demo{position:absolute;z-index:61;left:calc(var(--gut) + var(--u)*21);top:calc(var(--u)*2.4);font-size:calc(var(--u)*5);color:#6f7891;pointer-events:none}
+.demo{position:absolute;z-index:61;left:calc(var(--gut) + var(--u)*21);top:calc(var(--u)*2.4);font-size:max(11.5px,calc(var(--u)*5));color:#6f7891;pointer-events:none}
 .hdr{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,#fffdf9,#fcf7ef);transition:box-shadow .35s}
 .hdr.sc{box-shadow:0 calc(var(--u)*2) calc(var(--u)*10) rgba(16,42,94,.12)}
 .hdr-in{display:flex;align-items:center;height:calc(var(--u)*41);padding:calc(var(--u)*10) calc(var(--u)*16) 0 calc(var(--u)*33);transition:height .35s var(--ease),padding .35s var(--ease)}
@@ -138,7 +138,7 @@ ul,ol{list-style:none}
 @keyframes shine{from{background-position:120% 0}to{background-position:-120% 0}}
 .hero blockquote{margin-left:calc(var(--u)*23.5);padding-top:calc(var(--u)*7);font:600 calc(var(--u)*11.9)/1.33 var(--text);font-stretch:84%}
 .hero figcaption{margin:calc(var(--u)*3.4) 0 0 calc(var(--u)*24);font:500 calc(var(--u)*6.6)/1.2 var(--text);font-stretch:90%;color:#e5ebf7}
-.hero figcaption small{display:block;font-size:calc(var(--u)*5.3);opacity:.82;margin-top:calc(var(--u)*.6)}
+.hero figcaption small{display:block;font-size:max(11.5px,calc(var(--u)*5.3));opacity:.82;margin-top:calc(var(--u)*.6)}
 .hero-btns{position:absolute;left:calc(var(--u)*62);top:calc(var(--u)*188);display:flex;gap:calc(var(--u)*6);opacity:0;animation:fadeUp 1s 1s forwards}
 .hero-btns .btn-teal{width:calc(var(--u)*92)}
 .hero-btns .btn-line{width:calc(var(--u)*71)}
@@ -166,7 +166,7 @@ ul,ol{list-style:none}
 
 /* =================== Avval va hozir =================== */
 .compare{background:linear-gradient(180deg,#e8f0f9,#dfe9f5);height:calc(var(--u)*132);padding-top:calc(var(--u)*8.5)}
-.cgrid{display:grid;grid-template-columns:calc(var(--u)*151) calc(var(--u)*147) calc(var(--u)*150);gap:calc(var(--u)*4);justify-content:center;margin-top:calc(var(--u)*-1.5)}
+.cgrid{display:grid;grid-template-columns:calc(var(--u)*151) calc(var(--u)*147) calc(var(--u)*150);gap:calc(var(--u)*4);justify-content:center;margin-top:calc(var(--u)*2)}
 .card{background:#fff;border-radius:calc(var(--u)*3.6);box-shadow:var(--shadow);transition:transform .5s var(--ease),box-shadow .5s}
 .card:hover{transform:translateY(calc(var(--u)*-2.5));box-shadow:var(--shadow-h)}
 .cc{position:relative;height:calc(var(--u)*88);overflow:hidden}
@@ -182,7 +182,7 @@ ul,ol{list-style:none}
 .cc-top p{font-size:calc(var(--u)*5.7);color:#3b4767;margin-top:calc(var(--u)*3)}
 .cc-num{display:flex;align-items:baseline;gap:calc(var(--u)*5);margin-top:calc(var(--u)*5);font:700 calc(var(--u)*17)/1 var(--text);font-stretch:100%;color:var(--ink);white-space:nowrap;margin-left:calc(var(--u)*-5)}
 .cc-num .to{font:400 calc(var(--u)*9)/1 var(--text);color:var(--ink)}
-.cc-num.small{font-size:calc(var(--u)*11.5);gap:calc(var(--u)*3);margin-top:calc(var(--u)*11)}
+.cc-num.small{font-size:calc(var(--u)*10.4);gap:calc(var(--u)*3);margin-top:calc(var(--u)*11)}
 .cc-num.small .to{font-size:calc(var(--u)*7)}
 .cc-num small{font-size:.62em;font-weight:600}
 .cc-yr{margin:calc(var(--u)*2.6) 0 0 calc(var(--u)*-5);font-size:calc(var(--u)*6.3);color:#2e3a5c;word-spacing:.3em}
@@ -216,7 +216,7 @@ ul,ol{list-style:none}
 .tl button:hover .tl-ph img{transform:scale(1.07)}
 .tl.on .tl-ph,.tl button:hover .tl-ph{outline-color:#e2c47c;transform:translateY(calc(var(--u)*-1.5))}
 .tl-t{display:block;margin-top:calc(var(--u)*6.5);font:500 calc(var(--u)*7.9)/1.2 var(--text);font-stretch:86%;padding-left:calc(var(--u)*4)}
-.tl-x{display:block;font-size:calc(var(--u)*4.8);color:#c6d3ea;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s,opacity .5s}
+.tl-x{display:block;font-size:max(11.5px,calc(var(--u)*4.8));color:#c6d3ea;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s,opacity .5s}
 .tl.on .tl-x{max-height:0;opacity:0}
 
 /* =================== Hududlar =================== */
@@ -232,7 +232,7 @@ ul,ol{list-style:none}
 .uzmap .pin circle{fill:#0e98b6;stroke:#fff;stroke-width:3}
 .uzmap .pin .pulse{fill:none;stroke:#0e98b6;stroke-width:3;animation:pingc 1.8s infinite;transform-origin:center;transform-box:fill-box}
 @keyframes pingc{from{transform:scale(.4);opacity:.9}to{transform:scale(1.4);opacity:0}}
-.maplabel{position:absolute;left:calc(var(--u)*60);bottom:calc(var(--u)*-2);background:var(--navy);color:#fff;font-size:calc(var(--u)*5);padding:calc(var(--u)*1.5) calc(var(--u)*4);border-radius:calc(var(--u)*1.5);pointer-events:none;white-space:nowrap}
+.maplabel{position:absolute;left:calc(var(--u)*60);bottom:calc(var(--u)*-2);background:var(--navy);color:#fff;font-size:max(11.5px,calc(var(--u)*5));padding:calc(var(--u)*1.5) calc(var(--u)*4);border-radius:calc(var(--u)*1.5);pointer-events:none;white-space:nowrap}
 .rg-ctl{margin-left:calc(var(--u)*-8);padding-top:calc(var(--u)*41);display:flex;flex-direction:column;gap:calc(var(--u)*1.5)}
 .sel{position:relative}
 .sel>button{display:flex;align-items:center;gap:calc(var(--u)*5);width:100%;height:calc(var(--u)*26);padding:0 calc(var(--u)*7);background:#fff;border:1px solid #e1dbcf;border-radius:calc(var(--u)*2.6);font-size:calc(var(--u)*5.8);color:#2b3758;box-shadow:0 calc(var(--u)*1.5) calc(var(--u)*5) rgba(16,42,94,.05);transition:border-color .3s,box-shadow .3s}
@@ -277,7 +277,7 @@ ul,ol{list-style:none}
 
 /* =================== Prezident asarlari =================== */
 .books{height:calc(var(--u)*213);padding-top:calc(var(--u)*12);background:linear-gradient(180deg,#fdfcf9,#f6f2ea)}
-.books .all{position:absolute;right:calc(var(--u)*28);top:calc(var(--u)*13.5);display:flex;align-items:center;gap:calc(var(--u)*2);font-size:calc(var(--u)*5);font-weight:600;color:#2c4f8f}
+.books .all{position:absolute;right:calc(var(--u)*28);top:calc(var(--u)*13.5);display:flex;align-items:center;gap:calc(var(--u)*2);font-size:max(11.5px,calc(var(--u)*5));font-weight:600;color:#2c4f8f}
 .books .all .arr{width:calc(var(--u)*5)}
 .books .all:hover .arr{transform:translateX(calc(var(--u)*1.2))}
 .bgrid{display:grid;grid-template-columns:repeat(3,calc(var(--u)*111));gap:0;justify-content:center;margin-top:calc(var(--u)*10);padding-left:calc(var(--u)*3)}
@@ -295,7 +295,7 @@ ul,ol{list-style:none}
 .b2 .spine{background:linear-gradient(90deg,#125f91,#1d82bb)}
 .b3 .cover{background:linear-gradient(160deg,#1b2f62,#142650 55%,#0e1d40)}
 .b3 .spine{background:linear-gradient(90deg,#0a1531,#16285a)}
-.book .au{font:500 calc(var(--u)*5)/1.35 var(--text);letter-spacing:.1em;opacity:.92}
+.book .au{font:500 max(11.5px,calc(var(--u)*5))/1.35 var(--text);letter-spacing:.1em;opacity:.92}
 .book .ti{display:flex;flex-direction:column;align-items:center;margin-top:calc(var(--u)*17);font:600 calc(var(--u)*8.6)/1.32 var(--display);font-stretch:82%;letter-spacing:.04em}
 .b3 .au{color:#e6cf97;margin-top:calc(var(--u)*1)}
 .b3 .ti{color:#f0dba6;font-size:calc(var(--u)*6.8);margin-top:calc(var(--u)*15)}
@@ -303,7 +303,7 @@ ul,ol{list-style:none}
 .b3 .frame::after{content:"";position:absolute;inset:calc(var(--u)*1.5);border:1px solid rgba(184,149,78,.6)}
 .bk h3{margin-top:calc(var(--u)*5);font:600 calc(var(--u)*7)/1.2 var(--text);font-stretch:86%;color:var(--ink);max-width:calc(var(--u)*100);min-height:calc(var(--u)*17)}
 .bk .btn-out{margin-top:calc(var(--u)*2)}
-.note{text-align:center;font-size:calc(var(--u)*4.4);color:#7b8399;margin-top:calc(var(--u)*5)}
+.note{text-align:center;font-size:max(11.5px,calc(var(--u)*4.4));color:#7b8399;margin-top:calc(var(--u)*5)}
 
 /* =================== Pastki qism =================== */
 .ftr{position:relative;color:#fff;background:linear-gradient(180deg,#0e2556,#0a1e47);overflow:hidden}
@@ -313,9 +313,9 @@ ul,ol{list-style:none}
 .logo.gold{color:#fff;gap:calc(var(--u)*8)}
 .logo.gold svg{width:calc(var(--u)*24);height:calc(var(--u)*24)}
 .logo.gold b{font-size:calc(var(--u)*8.6);line-height:1}
-.logo.gold small{font-size:calc(var(--u)*5)}
+.logo.gold small{font-size:max(11.5px,calc(var(--u)*5))}
 .ftr nav{display:flex;gap:calc(var(--u)*12.7);margin-left:calc(var(--u)*29);align-self:flex-start;padding-top:calc(var(--u)*3)}
-.ftr nav a{font:italic 500 calc(var(--u)*4.85)/1 var(--text);font-stretch:88%;color:#dfe6f4;transition:color .3s}
+.ftr nav a{font:italic 500 max(11.5px,calc(var(--u)*4.85))/1 var(--text);font-stretch:88%;color:#dfe6f4;transition:color .3s}
 .ftr nav a:hover{color:var(--gold-2)}
 .soc{display:flex;gap:calc(var(--u)*1.2);margin-left:auto;align-self:flex-start}
 .soc a{display:grid;place-items:center;width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:rgba(255,255,255,.1);transition:background .35s,transform .35s}
@@ -323,8 +323,8 @@ ul,ol{list-style:none}
 .soc svg{width:calc(var(--u)*8);height:calc(var(--u)*8);fill:#fff}
 .ftr-sky{height:calc(var(--u)*30);margin-top:calc(var(--u)*-21);padding:0 calc(var(--u)*14) 0 calc(var(--u)*20)}
 .sky{display:block;width:100%;height:100%}
-.ftr-bot{display:flex;justify-content:center;padding:calc(var(--u)*7) 0 calc(var(--u)*4);font-size:calc(var(--u)*5.1);color:#c8d2e6;font-stretch:90%}
-.ftr-bot span:last-child{position:absolute;right:calc(var(--u)*24);font-size:calc(var(--u)*4.6)}
+.ftr-bot{display:flex;justify-content:center;padding:calc(var(--u)*7) 0 calc(var(--u)*4);font-size:max(11.5px,calc(var(--u)*5.1));color:#c8d2e6;font-stretch:90%}
+.ftr-bot span:last-child{position:absolute;right:calc(var(--u)*24);font-size:max(11.5px,calc(var(--u)*4.6))}
 
 /* =================== Umumiy UI: preloader, modal, toast =================== */
 #pre{position:fixed;inset:0;background:var(--navy-3);z-index:999;display:grid;place-items:center;transition:opacity .7s ease,visibility .7s}
