@@ -193,6 +193,7 @@ export default function Site({ photos }: { photos: Photos }) {
           </div>
           <div className="hero-shade" />
           <HeroBand className="hero-band" />
+          <HeroBand className="hero-band hero-band-r" />
           <HeroCorner className="hero-corner" />
           <div className="wrap hero-in">
             <h1>

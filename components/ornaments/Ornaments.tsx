@@ -69,7 +69,7 @@ function Lobe() {
 
 export function HeroBand(p: P) {
   return (
-    <svg preserveAspectRatio="xMinYMin slice" aria-hidden="true" {...p}>
+    <svg viewBox="0 0 40 218" preserveAspectRatio="xMinYMin slice" aria-hidden="true" {...p}>
       <defs>
         <pattern id="lobes" width="40" height="70" patternUnits="userSpaceOnUse" y="-6">
           <Lobe />
